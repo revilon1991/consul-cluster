@@ -1,0 +1,59 @@
+version: '3.7'
+
+volumes:
+    app_volume:
+        name: app_volume
+        driver: local
+        driver_opts:
+            type: nfs
+            o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+            device: ":${PWD}"
+
+services:
+    proxy:
+        image: proxy_image
+        container_name: proxy_container
+        build:
+            context: ./proxy
+            args:
+                CONSUL_VERSION: ${CONSUL_VERSION}
+                CONSUL_CLUSTER_ENCRYPT: ${CONSUL_CLUSTER_ENCRYPT}
+        depends_on:
+            - node_leader
+    node_leader:
+        image: node_leader_image
+        container_name: node_leader_container
+        build:
+            context: ./node_leader
+            args:
+                CONSUL_VERSION: ${CONSUL_VERSION}
+                CONSUL_CLUSTER_ENCRYPT: ${CONSUL_CLUSTER_ENCRYPT}
+        working_dir: /go
+        volumes:
+            - app_volume:/go
+    node_second:
+        image: node_second_image
+        container_name: node_second_container
+        build:
+            context: ./node_second
+            args:
+                CONSUL_VERSION: ${CONSUL_VERSION}
+                CONSUL_CLUSTER_ENCRYPT: ${CONSUL_CLUSTER_ENCRYPT}
+        depends_on:
+            - node_leader
+        working_dir: /go
+        volumes:
+            - app_volume:/go
+    node_third:
+        image: node_third_image
+        container_name: node_third_container
+        build:
+            context: ./node_third
+            args:
+                CONSUL_VERSION: ${CONSUL_VERSION}
+                CONSUL_CLUSTER_ENCRYPT: ${CONSUL_CLUSTER_ENCRYPT}
+        depends_on:
+            - node_leader
+        working_dir: /go
+        volumes:
+            - app_volume:/go
