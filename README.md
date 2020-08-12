@@ -12,6 +12,8 @@ docker-compose up -d
 ```
 
 ### Usage
+Use your browser for view UI Consul interface on [localhost](http://localhost)
+***
 ```bash
 # List all members of cluster
 docker-compose exec proxy consul members

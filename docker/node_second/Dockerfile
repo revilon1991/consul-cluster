@@ -12,7 +12,7 @@ RUN mv /tmp/consul /usr/local/bin/consul
 
 # config consul
 RUN mkdir /var/consul
-ADD files /etc/consul.d/
+ADD files/consul /etc/consul.d/
 RUN cat /etc/consul.d/server/config.json.tpl | jq '.encrypt = $encrypt_str' --arg encrypt_str ${CONSUL_CLUSTER_ENCRYPT} > /etc/consul.d/server/config.json
 
 ADD entrypoint.sh /

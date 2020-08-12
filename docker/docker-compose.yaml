@@ -20,6 +20,8 @@ services:
                 CONSUL_CLUSTER_ENCRYPT: ${CONSUL_CLUSTER_ENCRYPT}
         depends_on:
             - node_leader
+        ports:
+            - 80:80
     node_leader:
         image: node_leader_image
         container_name: node_leader_container
