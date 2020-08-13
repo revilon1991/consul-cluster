@@ -1,0 +1,15 @@
+upstream cluster { {{range service "consul"}}
+    server {{.Address}}:8080 max_fails=3 fail_timeout=60 weight=1;{{end}}
+}
+
+server {
+    listen 80;
+    server_name localhost;
+
+    access_log /var/log/nginx/proxy_access.log;
+    error_log /var/log/nginx/proxy_error.log;
+
+    location / {
+        proxy_pass http://cluster;
+    }
+}

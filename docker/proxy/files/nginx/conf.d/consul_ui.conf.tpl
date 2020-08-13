@@ -1,5 +1,5 @@
 server {
-    listen 80;
+    listen 8585;
     server_name localhost;
 
     access_log /var/log/nginx/proxy_access.log;

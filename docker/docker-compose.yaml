@@ -22,6 +22,7 @@ services:
             - node_leader
         ports:
             - 80:80
+            - 8585:8585
     node_leader:
         image: node_leader_image
         container_name: node_leader_container
